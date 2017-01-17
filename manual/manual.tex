@@ -1,0 +1,128 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage[Q=yes]{examplep}
+\usepackage[none]{hyphenat}
+\usepackage{fancyvrb}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\author{François Coppens}
+\title{MovieTime user manual}
+\begin{document}
+\maketitle
+\date
+\tableofcontents
+\section{Files \& directories}  
+\subsection{Directories}
+These directories are all relative to the \verb+MovieTime/+ root directory, but it can have any old name of course. 
+\begin{description}
+    \item[\PVerb{src/:}] Repository for the Fortran source code.
+    \item[\PVerb{manual/:}] \LaTeX $\,$ source of this manual.
+    \item[\PVerb{Movie/1D-densities/:}] Repository for the \verb+den-{1,2}.$ID.dat+-files.
+    \item[\PVerb{Movie/1D-images/:}] Repository for the \verb+den-{1,2}.$ID.jpg+-files.
+    \item[\PVerb{Movie/2D-densities/:}] Repository for the \verb+current.$ID.dat+-files
+    \item[\PVerb{Movie/2D-images/:}] Repository for the \verb+den.$ID.dat+-files
+    \item[\PVerb{Movie/Params/:}] Repository for the \verb+params.$ID.py+-files
+    \item[\PVerb{Movie/Results/:}] Repository for the \verb+density.$ID.res+-files
+\end{description}
+    	
+\subsection{Settings}
+\begin{description}
+    \item[\PVerb{movietime.settings:}] Global settings for the whole program. Used in \verb+movietime.sh+.
+    \item[\PVerb{density.settings:}] Settings and parameters that affect how the wave function files are read and processed. Used by \verb+readwf-xy+ and \verb+params+.
+    \item[\PVerb{plotsettings.py:}] Settings that affect the generation of the images and what information is shown in them. Used by \verb+plot.py+.
+    \item[\PVerb{launch.slurm:}] (optional) Settings for the SLURM workload manager. If you want to run in batch mode.
+\end{description}
+
+\subsection{Executables}
+\begin{description}
+    \item[\PVerb{movietime.sh:}] \textbf{Main script} that controls the whole process. Outputs \verb+movie-2D.mp4+.
+    \item[\PVerb{plot.py:}] Python program that generates the images. Outputs \verb+den-{1,2}.$ID.jpg+ and \verb+den.$ID.jpg+.
+    \item[\PVerb{src/readwf-xy:}] Fortran program that reads the wave functions and outputs 1D and 2D cuts of the densities/currents that are used by \verb+plot.py+. Outputs: \verb+den-{1,2}.$ID.dat+, \verb+current.$ID.dat+ and \verb+density.$ID.res+
+    \item[\PVerb{src/params:}] Fortran program that reads meta information of the wave functions and saves them in \verb+params.$ID.py+-files to be used by the \verb+plot.py+ program.
+\end{description}
+
+\subsection{Other}
+\begin{description}
+    \item[\PVerb{movietime.functions:}] Functions used by the \verb+movietime.sh+ shell script.
+    \item[\PVerb{manual/manual.pdf:}] The manual you are reading now.
+\end{description}
+
+\section{Setting up things}
+
+The \verb+MovieTime+-directory doesn't have to be in a specific place to work but I usually put a copy in the directory containing the \verb+density.$ID.dat+-files, where \verb+$ID+$\,\in \{0000, 0001, 0002, \ldots, 9999\}$. After that the first thing to do is open the \verb+movietime.settings+ file. 
+\subsection{\protect\Verb+movietime.settings+}
+If you are on a Mac and use the Intel Fortran compiler, uncomment the line \verb+#source /opt/intel/bin/compilervars.sh intel64+. I assume you know how to modify \verb+src/Makefile+ to make the Fortran programs compile and link properly.
+
+\begin{description}
+    \item[\PVerb{MANUAL_DYNPARMS:}] \verb+true+/\verb+false+ This is to set the time manually in the image frames. This is for the old density files that do not contain the time not the helium center of mass in the header. The fields \verb+{X,Y}CM+ are ignored and the helium droplet's center of mass position is set to 0 and then added to the \verb+params.$ID.py+ file.
+    \item[\PVerb{T0, DT:}] If \verb+MANUAL_DYNPARMS+ is set to \verb+true+, \verb+T0+ sets the time offset from 0 and \verb+DT+ sets the size of the timestep in picoseconds.
+    \item[\PVerb{STATIC:}] If this field is set to \verb+true+, \verb+MANUAL_DYNPARMS+ is ignored and the center of mass coordinates of the helium droplet, set in \verb+{X,Y}CM+, is manually added to the \verb+params.$ID.py+ file.
+    \item[\PVerb{{X,Y}CM:}] Center of mass coordinates of the helium droplet in the chosen plane.
+    \item[\PVerb{FPS:}] Number of frames per second at which the movie is going to be compiled. Usually between 15 and 25 frames per second. 
+\end{description}
+
+\subsection{\protect\Verb+density.settings+}
+
+\begin{description}
+ \item[\PVerb{nthreads:}] Number of CPU threads to use for OpenMP. Normally between 1 and 20.
+ \item[\PVerb{denmode:}] $\{1,2,3,4\}$ Determines how to read the wave function files. Set to $\neq \{1,2,3,4\}$ for an explanation during execution.
+ \item[\PVerb{parammode:}] $\{1,2,3,4\}$ Determines how to read the wave function header information. Set to $\neq \{1,2,3,4\}$ for an explanation during execution.
+ \item[\PVerb{mimpur:}] Mass of the impurity in \emph{unified atomic mass units} [u].
+ \item[\PVerb{plane:}] $\{xy,xz,yz\}$ Selects the plane that will be cut from the full 3D wave function
+ \item[\PVerb{planeoffset:}] Give an offset value in $\AA$ to cut the plane above or below the origin of the lab frame.
+ \item[\PVerb{tracking:}] $\{.true., .false.\}$ If `tracking' is enabled, the origin of the plane that will be cut is set to the coordinates of the impurity. In this case \verb+planeoffset+ can be interpreted as the radius of the atomic bubble. Useful to look in a plane just above the atomic bubble.
+ \item[\PVerb{h{x,y,z}:}] $r$-step in the $x,y,z$-direction, AFTER interpolation
+ \item[\PVerb{n{x,y,z}:}] Number of grid points in the $x,y,z$-direction, AFTER interpolation
+ \item[\PVerb{{x,y,z}{i,f}:}] Begin- and end-points of closed contours containing vortex cores to calculate quantized circulation.
+ \item[\PVerb{epsrho:}] I don't know what this is.
+ \item[\PVerb{npi:}] I don't know what this is.
+\end{description}
+
+\subsection{\protect\Verb+plotsettings.py+}
+
+\begin{description}
+    \item[\PVerb{DrawDensity:}] $\{True, False\}$ Draw the 2D He density, yes/no.
+    \item[\PVerb{DrawImpurity:}] $\{True, False\}$ Draw the impurity, yes/no. 
+    \item[\PVerb{DrawCirculation:}] $\{True, False\}$ Draw the He circulation lines, yes/no.
+    \item[\PVerb{FirstFrame:}] $\{True, False\}$ Display a title in the image, yes/no.
+    \item[\PVerb{IncludePosition:}] $\{True, False\}$ Display impurity position info in the image, yes/no.
+    \item[\PVerb{IncludeSpeed:}] $\{True, False\}$ Display impurity velocity in the image, yes/no.
+    \item[\PVerb{IncludeEnergy:}] $\{True, False\}$ Display impurity kinetic energy in the image, yes/no.
+    \item[\PVerb{IncludeNParticles:}] $\{True, False\}$ Display number of $^4$He atoms in the image, yes/no.
+    \item[\PVerb{FirstFrameTitle:}] $\{string\}$ Title string. \LaTeX$\,$syntax is supported.
+    \item[\PVerb{{x,y}label:}] $\{string\}$ Axis titles. \LaTeX$\,$syntax is supported.
+    \item[\PVerb{rho0:}] Saturation density of bulk liquid helium.
+    \item[\PVerb{rhoscaling:}] Scale the saturation density.
+    \item[\PVerb{denmaxvalue:}] Set the maximum value of the density for the color bar.
+\end{description}
+
+\section{Running the stuff}
+After checking and adjusting all the settings it is time to initialize the environment. This is simply done by running
+\begin{verbatim}
+./movietime.sh init
+\end{verbatim}
+This will compile all the programs and setup the necessary directory structure \verb+Movie+, within the execution directory.
+
+After that it is usually a good idea to do a few individual runs on some density files to check the results, before running a lengthy batch run. This is done by invoking:
+\begin{verbatim}
+./movietime.sh 4 ../path/to/some/density.$ID.dat
+\end{verbatim}
+After this, you can inspect the result, e.g. the 2D image, in \verb+Movie/2D-images/den.$ID.jpg+. If you are happy with the result you can run the program in an unattended mode by either running
+\begin{verbatim}
+./movietime.sh 3 ../path/to/densities
+\end{verbatim}
+or
+\begin{verbatim}
+sbatch launch.slurm
+\end{verbatim}
+In the second case the first command is submitted to a batch scheduler by the SLURM system. You will have to modify \verb+launch.slurm+ to your needs first of course.
+Finally, when you are done, you could run the cleanup procedure to delete any dangling symlinks, program modules and other temporary files that were produced by the programs by invoking
+\begin{verbatim}
+./movietime cleanup
+\end{verbatim}
+For a complete list of run-time options invoke \verb+./movietime.sh+ without any arguments
+%\vspace{0.5in}
+\center\textbf{\Huge{\textsc{That's all folks !}}}
+\end{document}

@@ -1,0 +1,13 @@
+.DS_Store
+manual/manual.aux
+manual/manual.log
+manual/manual.pdf
+manual/manual.synctex.gz
+manual/manual.toc
+Movie/*
+src/readwf-xy
+src/params
+src/*.o
+src/*.mod
+readwf-xy
+params
