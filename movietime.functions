@@ -17,7 +17,7 @@ makeDirStructure () {
 	[ ! -d Movie/Params ] && mkdir -v Movie/Params
 	[ ! -d Movie/Results ] && mkdir -v Movie/Results
 	[ ! -d Movie/2D-images ] && mkdir -v Movie/2D-images
-	[ ! -d Movie/1D-images ] && mkdir -v Movie/1D-images	
+	[ ! -d Movie/1D-images ] && mkdir -v Movie/1D-images
 }
 
 setFileID () {
@@ -52,7 +52,7 @@ correct '${green}readmode${rst}' in '${green}density.settings${rst}'."
 		echo
 		echo
 		exit 1
-	fi				
+	fi
 	mv den-1.dat Movie/1D-densities/den-1.${ID}.dat
 	mv den-2.dat Movie/1D-densities/den-2.${ID}.dat
 	mv density.res Movie/Results/density.${ID}.res
@@ -73,19 +73,24 @@ genParams () {
 	fi
 	if [[ $STATIC == "true" ]]
 	then
-		echo "time = 0" >> params.py	
+		echo "time = 0" >> params.py
 		echo "xcom = $XCM" >> params.py
 		echo "ycom = $YCM" >> params.py
 	fi
 	mv params.py Movie/Params/params.${ID}.py
-	rm djogger.dat	
+	rm djogger.dat
 }
 
 plotImagePy () {
 	echo "plotImage()"
-	ln -sv Movie/Params/params.${ID}.py params.py 
-	./plot.py Movie/2D-densities/current.${ID}.dat
-	convert density.png -resize x1080 density.jpg 
+	ln -sv Movie/Params/params.${ID}.py params.py
+	if [ -z ${PYTHON+x} ]
+	then
+		./plot.py Movie/2D-densities/current.${ID}.dat
+	else
+		$PYTHON plot.py Movie/2D-densities/current.${ID}.dat
+	fi
+	convert density.png -resize x1080 density.jpg
 	convert density.jpg -crop 1506x1080+1+0 Movie/2D-images/den.${ID}.jpg
 	rm density.png density.jpg params.py params.pyc
 }
@@ -100,7 +105,7 @@ plot1DImage () {
 	mv denz.png Movie/1D-images/denz-${ID}.png
 }
 
-compileMovie () { 
+compileMovie () {
 	echo "compileMovie()"
 	ffmpeg -r ${FPS} -f image2 -i Movie/2D-images/den.%04d.jpg -vcodec libx264 -preset \
 		ultrafast -crf 18 -pix_fmt yuv420p Movie/movie-2D.mp4

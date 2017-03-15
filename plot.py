@@ -1,4 +1,4 @@
-#!/users/p1039/coppens/_meuk/python-2.7.12-intel/bin/python
+#!/usr/bin/python
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
@@ -7,7 +7,7 @@ import sys
 from params import *
 from plotsettings import *
 
-### SOME GLOBAL SETTINGS 
+### SOME GLOBAL SETTINGS
 plt.rcParams['text.color'] = 'lightgrey'
 plt.rcParams['axes.labelcolor'] = 'lightgrey'
 plt.rcParams['axes.facecolor'] = "black"
@@ -86,66 +86,65 @@ Cy[Mask] = None
 ### PLOT DATA
 if DrawDensity:
 	im = plt.imshow(D,
-					extent=[-xmax, xmax, -ymax, ymax],
-					cmap=plt.cm.CMRmap,
-					vmin=0,
-					vmax=denmaxvalue,
-					)
+			extent=[-xmax, xmax, -ymax, ymax],
+			cmap=plt.cm.CMRmap,
+			vmin=0,
+			vmax=denmaxvalue)
 	im.set_interpolation('lanczos')
 	plt.colorbar(im, fraction=0.0377, pad=0.02)
 
 if DrawImpurity:
 	circle=plt.Circle((ximp, yimp),
-				radius=1.5,
-				color='#6D8E2B')
+			radius=1.5,
+			color='#6D8E2B')
 	plt.axes().add_patch(circle)
 
-if DrawCirculation:				
+if DrawCirculation:
 	plt.streamplot(X, Y, Cx, Cy,
-					color="#76D6FF",
-					linewidth=0.9,
-					arrowstyle='fancy',
-					arrowsize=3,
-					density=2.5)
+			color="#76D6FF",
+			linewidth=0.9,
+			arrowstyle='fancy',
+			arrowsize=3,
+			density=2.5)
 
 if FirstFrame:
 	plt.axes().text(fframex, fframey, FirstFrameTitle,
-					color='lightgrey',
-					fontsize=10,
-					family='Arial')
+			color='lightgrey',
+			fontsize=10,
+			family='Arial')
 
 if IncludePosition:
 	X=ximp-xcom
 	Y=yimp-ycom
 	R=np.sqrt(X*X+Y*Y)
 	positionstring = "$r_{I}=" + str(round(R,1)) + "\,\mathrm{\AA}$"
-	plt.axes().text(posx, posy, positionstring, 
-					color='lightgrey',
-					fontsize=11)
+	plt.axes().text(posx, posy, positionstring,
+			color='lightgrey',
+			fontsize=11)
 
 if IncludeSpeed:
 	X=xlabel[1]
 	Y=ylabel[1]
 	vxstring = "$v_{" + X + "}=" + str(round(vximp,1)) + "\,\mathrm{ms^{-1}}$"
 	vystring = "$v_{" + Y + "}=" + str(round(vyimp,1)) + "\,\mathrm{ms^{-1}}$"
-	plt.axes().text(speedvxx, speedvxy, vxstring, 
-					color='lightgrey',
-					fontsize=11)
-	plt.axes().text(speedvyx, speedvyy, vystring, 
-					color='lightgrey',
-					fontsize=11)
+	plt.axes().text(speedvxx, speedvxy, vxstring,
+			color='lightgrey',
+			fontsize=11)
+	plt.axes().text(speedvyx, speedvyy, vystring,
+			color='lightgrey',
+			fontsize=11)
 
 if IncludeEnergy:
 	energystring = "$E_{k}=" + str(round(ekin,1)) + "\,\mathrm{K}$"
-	plt.axes().text(energyx, energyy, energystring, 
-					color='lightgrey',
-					fontsize=11)
+	plt.axes().text(energyx, energyy, energystring,
+			color='lightgrey',
+			fontsize=11)
 
 if IncludeNParticles:
 	particlestring = "$N_{He}=" + str(nparticles) + "\,\\#$"
-	plt.axes().text(particlex, particley, particlestring, 
-					color='lightgrey',
-					fontsize=11)
+	plt.axes().text(particlex, particley, particlestring,
+			color='lightgrey',
+			fontsize=11)
 
 plt.minorticks_on()
 plt.axes().set_aspect('equal')

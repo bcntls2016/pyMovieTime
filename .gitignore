@@ -11,3 +11,4 @@ src/*.o
 src/*.mod
 readwf-xy
 params
+plotsettings.pyc
