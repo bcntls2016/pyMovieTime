@@ -1,7 +1,6 @@
 source /opt/intel/bin/compilervars.sh intel64
 PYTHON=/opt/intel/intelpython27/bin/python
-
-MANUAL_DYNPARMS=false	# Set to 'true' if you want to use old wave function files with less
+MANUAL_DYNPARMS=true	# Set to 'true' if you want to use old wave function files with less
 						#    information in the header.
 T0=0					# Time offset (when you want to continue with another dataset for ex.
 						#    normally this 0). Ignored if MANUAL_DYNPARMS=false and/or STATIC=true.

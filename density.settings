@@ -3,7 +3,7 @@
  denmode =		2
  parammode =	1			! Put to 0 to see explanation
  mimpur =		131.29d0	! Impurity mass in [u]
- plane =		"xy" 		! Can be {xy,xz,yz}
+ plane =		"xz" 		! Can be {xy,xz,yz}
  tracking =		.false. 	! Controls impurity tracking
  planeoffset =	0 			! offset along perp. axis in \AA
  hx = 0.2,	hy = 0.2,	hz = 0.2 ! AFTER INTERPOLATION

@@ -90,9 +90,10 @@ plotImagePy () {
 	else
 		$PYTHON plot.py Movie/2D-densities/current.${ID}.dat
 	fi
-	convert density.png -resize x1080 density.jpg
-	convert density.jpg -crop 1506x1080+1+0 Movie/2D-images/den.${ID}.jpg
-	rm density.png density.jpg params.py params.pyc
+	#convert density.png -resize x1080 density.jpg
+	#convert density.jpg -crop 1506x1080+1+0 Movie/2D-images/den.${ID}.jpg
+	mv density.png Movie/2D-images/den.${ID}.png
+	rm params.py params.pyc
 }
 
 plot1DImage () {

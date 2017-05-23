@@ -91,7 +91,8 @@ if DrawDensity:
 			vmin=0,
 			vmax=denmaxvalue)
 	im.set_interpolation('lanczos')
-	plt.colorbar(im, fraction=0.0377, pad=0.02)
+	cbar=plt.colorbar(im, ticks=[0, 0.0109, 0.0218, 0.0327], pad=0.02)
+	cbar.ax.set_yticklabels([r'$0$', r'$\frac{1}{2}\rho_0$', r'$\rho_0$', r'$\frac{3}{2}\rho_0$']) 
 
 if DrawImpurity:
 	circle=plt.Circle((ximp, yimp),
