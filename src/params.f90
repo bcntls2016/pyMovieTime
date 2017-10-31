@@ -35,13 +35,12 @@ read(5,nml=input)
 
 mimpur = mimpur * mp_u
 
+open (unit=1, file=inputdata)
+open (unit=2, file=param)
 select case (parammode)
 	case (1) ! Statics
-		open (unit=1, file=inputdata)
 		call titols(1,cchar,isalto)
 		read(1,*) xmax,ymax,zmax,hx,hy,hz,nx,ny,nz,limp,rimp
-		close(1)
-		open(unit = 2, file = param)
 		write(2,*) "# params.py"
 		write(2,*)
 		select case (plane)
@@ -61,14 +60,10 @@ select case (parammode)
 				write(2,6000) "ximp = ", rimp(2)
 				write(2,6000) "yimp = ", rimp(3)
 		end select
-		close(unit = 2)
 	case (2) ! Dynamics
-		open (unit=1, file=inputdata)
 		call titols(1,cchar,isalto)
 		read(1,*) xmax,ymax,zmax,hx,hy,hz,nx,ny,nz,rimp,vimp
-		close(1)
 		Ekin = 0.5 * mimpur * sum(vimp * vimp)
-		open(unit = 2, file = param)
 		write(2,*) "# params.py"
 		write(2,*)
 		select case (plane)
@@ -95,9 +90,7 @@ select case (parammode)
 				write(2,6002) "vyimp = ", 100*vimp(3)/Ktops				
 		end select
 		write(2,6000) "ekin = ", Ekin
-		close(unit = 2)
 	case (3) ! Dynamics
-		open(unit=1, file=inputdata)
 		read(1,*)
 		read(1,*)
 		read(1,*) a,time
@@ -105,13 +98,42 @@ select case (parammode)
 		rewind(1)
 		call titols(1,cchar,isalto)
 		read(1,*) xmax,ymax,zmax,hx,hy,hz,nx,ny,nz,rimp,vimp
-		close(1)
 		Ekin = 0.5 * mimpur * sum(vimp * vimp)		
-		open(unit = 2, file = param)
-		write(2,7106) xmax, zmax, rimp(1), rimp(3), 100*sqrt(sum(vimp*vimp))/Ktops, Ekin, time, rcm(3)
-		close(2)
+		!write(2,7106) xmax, zmax, rimp(1), rimp(3), 100*sqrt(sum(vimp*vimp))/Ktops, Ekin, time, rcm(3)
+		write(2,*) "# params.py"
+		write(2,*)
+		select case (plane)
+			case ("xy")				
+				write(2,6000) "xmax = ", xmax
+				write(2,6000) "ymax = ", ymax
+				write(2,6000) "ximp = ", rimp(1)
+				write(2,6000) "yimp = ", rimp(2)
+				write(2,6000) "xcom = ", rcm(1)
+				write(2,6000) "ycom = ", rcm(2)
+				write(2,6002) "vximp = ", 100*vimp(1)/Ktops
+				write(2,6002) "vyimp = ", 100*vimp(2)/Ktops				
+			case ("xz")				
+				write(2,6000) "xmax = ", xmax
+				write(2,6000) "ymax = ", zmax
+				write(2,6000) "ximp = ", rimp(1)
+				write(2,6000) "yimp = ", rimp(3)
+				write(2,6000) "xcom = ", rcm(1)
+				write(2,6000) "ycom = ", rcm(3)
+				write(2,6002) "vximp = ", 100*vimp(1)/Ktops
+				write(2,6002) "vyimp = ", 100*vimp(3)/Ktops				
+			case ("yz")		
+				write(2,6000) "xmax = ", ymax
+				write(2,6000) "ymax = ", zmax
+				write(2,6000) "ximp = ", rimp(2)
+				write(2,6000) "yimp = ", rimp(3)
+				write(2,6000) "xcom = ", rcm(2)
+				write(2,6000) "ycom = ", rcm(3)
+				write(2,6002) "vximp = ", 100*vimp(2)/Ktops
+				write(2,6002) "vyimp = ", 100*vimp(3)/Ktops				
+		end select
+		write(2,6000) "ekin = ", Ekin
+		write(2,6000) "time = ", time
 	case (4) ! Dynamics
-		open(unit=1, file=inputdata)
 		read(1,*)
 		read(1,*)
 		read(1,*)
@@ -130,8 +152,6 @@ select case (parammode)
 		rewind(1)
 		call titols(1,cchar,isalto)
 		read(1,*) xmax,ymax,zmax,hx,hy,hz,nx,ny,nz,rimp,vimp
-		close(1)
-		open(unit = 2, file = param)
 		write(2,*) "# params.py"
 		write(2,*)
 		select case (plane)
@@ -166,7 +186,6 @@ select case (parammode)
 		write(2,6000) "ekin = ", Ekin
 		write(2,6000) "time = ", time
 		write(2,6001) "nparticles = ", nparticles
-		close(2)
 	case default
 		write(*,*)
 		write(*,*) "You have chosen a 'parammode' unequal to {1-4}. Please modify 'density.settings' and choose one of:"
@@ -177,6 +196,8 @@ select case (parammode)
 		write(*,*) "parammode = 4:	DYNAMIC helium wave-function. Time and COM info from WF-file, and more"
 		call EXIT(10)
 end select
+close(1)
+close(2)
 
 6000 format(A7, 1X, F7.2)
 6001 format(A13, 1X, F7.2)
