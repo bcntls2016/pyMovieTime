@@ -10,18 +10,13 @@ case $MODE in
 		[ ! -f readwf-xy ] && Compile
 		[ ! -f params ] && Compile
 		[ ! -d Movie ] && makeDirStructure
-		#chooseBoxSize
-		#selectImpurity
-		#selectEnergy
-		#selectFirstFrame
 		;;
 	1)
 		echo "Produce only densities..."
 		for FILE in ${DENPATH}/density.*.dat
 		do
 			setFileID ${FILE}
-			[ ! -f Movie/2D-densities/denxz-${ID}.dat ] && genDensity ${FILE}
-			[ ! -f Movie/Params/param-${ID}.dat ] && genParams ${FILE}
+			[ ! -f Movie/2D-densities/current.${ID}.dat ] && genCurrent ${FILE}
 		done
 		;;
 	2)
@@ -29,10 +24,10 @@ case $MODE in
 		for FILE in ${DENPATH}/density.*.dat
 		do
 			setFileID ${FILE}
-			[ ! -f Movie/2D-densities/denxz-${ID}.dat ] && genDensity ${FILE}
+			[ ! -f Movie/2D-densities/current.${ID}.dat ] && genCurrent ${FILE}
 			[ ! -f Movie/Params/param-${ID}.dat ] && genParams ${FILE}
 			[ ! -f Movie/2D-images/denxz-${ID}.png ] && plotImage
-			[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
+			#[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
 		done
 		;;
 	3)
@@ -40,10 +35,9 @@ case $MODE in
 		for FILE in ${DENPATH}/density.*.dat
 		do
 			setFileID ${FILE}
-			#[ ! -f Movie/2D-densities/denxz-${ID}.dat ] && genDensity ${FILE}
 			[ ! -f Movie/2D-densities/current.${ID}.dat ] && genCurrent ${FILE}
 			[ ! -f Movie/Params/params.${ID}.py ] && genParams ${FILE}
-			[ ! -f Movie/2D-images/den.${ID}.jpg ] && plotImagePy	
+			[ ! -f Movie/2D-images/den.${ID}.png ] && plotImagePy	
 			#[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
 			echo
 		done
@@ -52,10 +46,9 @@ case $MODE in
 	4)
 		echo "Produce a single density and image..."
 		setFileID ${DENPATH}
-		#[ ! -f Movie/2D-densities/denxz-${ID}.dat ] && genDensity ${DENPATH}
 		[ ! -f Movie/2D-densities/current.${ID}.dat ] && genCurrent ${DENPATH}
 		[ ! -f Movie/Params/params.${ID}.py ] && genParams ${DENPATH}
-		[ ! -f Movie/2D-images/den.${ID}.jpg ] && plotImagePy
+		[ ! -f Movie/2D-images/den.${ID}.png ] && plotImagePy
 		#[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
 		;;
 	5)
@@ -63,8 +56,9 @@ case $MODE in
 		for FILE in ${DENPATH}/density.*.dat
 		do
 			setFileID ${FILE}
+			[ ! -f Movie/Params/param-${ID}.dat ] && genParams ${FILE}
 			[ ! -f Movie/2D-images/denxz-${ID}.png ] && plotImage
-			[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
+			#[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
 		done
 		;;		
 	6)

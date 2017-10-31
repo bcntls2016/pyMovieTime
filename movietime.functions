@@ -90,8 +90,10 @@ plotImagePy () {
 	else
 		$PYTHON plot.py Movie/2D-densities/current.${ID}.dat
 	fi
-	#convert density.png -resize x1080 density.jpg
-	#convert density.jpg -crop 1506x1080+1+0 Movie/2D-images/den.${ID}.jpg
+	convert density.png -resize x${HEIGHT} density.png
+	WIDTH=$(convert density.png -print "%w" /dev/null)
+	REM=$((WIDTH%2))
+	[ $REM -ne 0 ] && convert density.png -chop 1x0 density.png
 	mv density.png Movie/2D-images/den.${ID}.png
 	rm params.py params.pyc
 }
@@ -108,11 +110,6 @@ plot1DImage () {
 
 compileMovie () {
 	echo "compileMovie()"
-	ffmpeg -r ${FPS} -f image2 -i Movie/2D-images/den.%04d.jpg -vcodec libx264 -preset \
+	ffmpeg -start_number ${FIRSTFRAME} -r ${FPS} -f image2 -i Movie/2D-images/den.%0${IDWIDTH}d.png -vcodec libx264 -preset \
 		ultrafast -crf 18 -pix_fmt yuv420p Movie/movie-2D.mp4
-# 	ffmpeg -r ${FPS} -f image2 -i Movie/1D-images/denz-%03d.png -vcodec libx264 -preset \
-# 		ultrafast -crf 18 -pix_fmt yuv420p Movie/movie-1D.mp4
-# 	ffmpeg -r ${FPS} -i Movie/2D-images/denxz-%03d.png -c:v qtrle -pix_fmt rgb24 \
-# 		Movie/movie-lossless.mov
-# 	ffmpeg -r ${FPS} -i Movie/2D-images/denxz-%03d.png -codec png Movie/movie-d.mov
 }

@@ -96,8 +96,10 @@ if DrawDensity:
 
 if DrawImpurity:
 	circle=plt.Circle((ximp, yimp),
-			radius=1.5,
-			color='#6D8E2B')
+			radius=1.25,
+			#color='#d9ef8b') # GREEN: GROUND ST.
+			color='#41b6c4') # BLUE-GREEN: EXCITED ST. #1
+			#color='#e7298a') # MANGENTA: EXCITED ST. #2
 	plt.axes().add_patch(circle)
 
 if DrawCirculation:
