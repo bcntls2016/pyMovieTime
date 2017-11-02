@@ -5,7 +5,7 @@ character (len = 15)	:: a(4)				! Crap we don't need
 character (len = 15)	:: b(2)				! Crap we don't need
 character (len = 15)	:: c(4)				! Crap we don't need
 character (len = 40)	:: inputdata = "djogger.dat"! Input file containing the wavefunction
-character (len = 40)	:: param = "params.py"	! Output file containing the parameters
+character (len = 40)	:: params = "params.py"	! Output file containing the parameters
 character (len = 1) 	:: cchar = "#"				! Character to be skipped on routine titols
 character (len = 2)		:: plane = "xy"
 logical (kind = 4)	:: limp = .false.	! Treat impurity CM coord quantum/classical
@@ -30,14 +30,14 @@ real (kind = 8)		:: planeoffset = 0
 real (kind = 8) , parameter	:: mp_u = 0.020614837554503673d0  	! proton mass in Angs**-2 * Kelvin**-1, go figure!
 real (kind = 8)	, parameter	::	Ktops=7.638235070684233d0		! Convert K to ps
 
-Namelist/Input/nthreads,denmode,parammode,mimpur,plane,tracking,planeoffset, &
+Namelist/Input/inputdata,params,nthreads,denmode,parammode,mimpur,plane,tracking,planeoffset, &
 				nx,ny,nz,hx,hy,hz,npd,npi,Km1,icon,epsrho,xi,xf,yi,yf,zi,zf
 read(5,nml=input)
 
 mimpur = mimpur * mp_u
 
 open (unit=1, file=inputdata)
-open (unit=2, file=param)
+open (unit=2, file=params)
 select case (parammode)
 	case (1) ! Statics
 		call titols(1,cchar,isalto)

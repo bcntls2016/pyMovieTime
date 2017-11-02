@@ -1,4 +1,10 @@
 &Input
+ inputdata		= '../he-wfs/density.123.dat'
+ currents		= 'current.123.dat'
+ den1dx			= 'den-1.123.dat'
+ den1dy			= 'den-2.123.dat'
+ results		= 'density.123.res'
+ params			= 'params.123.py'
  nthreads		= 20
  denmode		= 3			! Default set to 3: Isotropic dynamics 
  parammode		= 3			! Default set to 3: Isotr.dyn. w/extended header info

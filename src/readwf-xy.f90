@@ -28,8 +28,9 @@ Data nx/436/, ny/436/, nZ/436/, hx/0.4d0/, hy/0.4d0/, hy/0.4d0/, &
 Data fac/158.66624d0/,epsrho/1.d-6/
 Data xi/-40.d0/, xf/40.d0/, yi/-40.d0/, yf/40.d0/, zi/-40.d0/, zf/40.d0/
 
-Namelist/Input/nthreads,denmode,parammode,mimpur,plane,tracking,planeoffset, &
-				nx,ny,nz,hx,hy,hz,npd,npi,Km1,icon,epsrho,xi,xf,yi,yf,zi,zf
+Namelist/Input/inputdata,currents,den1dx,den1dy,results,nthreads,denmode, &
+	parammode,mimpur,plane,tracking,planeoffset,nx,ny,nz,hx,hy,hz,npd, &
+	npi,Km1,icon,epsrho,xi,xf,yi,yf,zi,zf
 read(5,nml=input)
 
 K = npd    ! Km1 will be the number of derivatives for the Taylor expansion
