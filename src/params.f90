@@ -1,4 +1,4 @@
-PROGRAM Params
+PROGRAM Parms
 
 IMPLICIT NONE
 character (len = 15)	:: a(4)				! Crap we don't need
