@@ -110,6 +110,6 @@ plot1DImage () {
 
 compileMovie () {
 	echo "compileMovie()"
-	ffmpeg -start_number ${FIRST_FRAME_NR} -r ${FPS} -f image2 -i Movie/2D-images/den.%0${ID_WIDTH}d.png -vcodec libx264 -preset \
+	ffmpeg -start_number ${FIRST_FRAME_NR} -r ${FPS} -f image2 -i ${OUTDIR}/2D-images/den.%0${ID_WIDTH}d.png -vcodec libx264 -preset \
 		ultrafast -crf 18 -pix_fmt yuv420p Movie/movie-2D.mp4
 }

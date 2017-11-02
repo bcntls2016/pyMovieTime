@@ -13,17 +13,31 @@
 
 
 module purge
-module load intel/16.1.3
+module load intel/16.1.3 intelmpi/5.1.3.210
+export I_MPI_WAIT_MODE=1 
 export OMP_NUM_THREADS=20
 export MKL_NUM_THREADS=20
 export OMP_PROC_BIND=true
-
 export WORKDIR=$(pwd)
-
 cd ${WORKDIR}
+
+mpirun chdb \
+	--in-dir ../he-wfs \
+	--in-files ../he-wfs/filter.txt \
+	--out-dir Movie.${SLURM_JOBID} \
+	--in-type dat \
+	--command-line './movietime.sh 3 %name% %in-dir% %out-dir%' \
+	--out-files %name% \
+	--on-error=errors.${SLURM_JOBID} \
+	--report=report.${SLURM_JOBID}
+
+infoincidentjob
+jobinfo ${SLURM_JOB_ID}
+
+
 date
 echo "Execution starting"
-time srun -N 1 -n 1 -c 20 $(placement 1 20) ./movietime.sh 3 ..
+time srun -N 1 -n 1 -c 20 $(placement 1 20) ./movietime.sh 3 ../he-wfs/
 date
 echo "Execution finished"
 

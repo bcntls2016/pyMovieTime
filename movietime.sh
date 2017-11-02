@@ -2,7 +2,9 @@
 source movietime.functions
 source movietime.settings
 MODE=$1
-DENPATH=$2
+NAME=$2
+DENPATH=$3
+OUTDIR=$4
 
 case $MODE in
 	init)
@@ -11,16 +13,16 @@ case $MODE in
 		[ ! -f params ] && Compile
 		[ ! -d Movie ] && makeDirStructure
 		;;
-	1)
-		echo "Produce only densities..."
+	1) ## LOOPED MODE
+		echo "Produce only DENSITIES..."
 		for FILE in ${DENPATH}/density.*.dat
 		do
 			setFileID ${FILE}
 			[ ! -f Movie/2D-densities/current.${ID}.dat ] && genCurrent ${FILE}
 		done
 		;;
-	2)
-		echo "Produce densities and images..."
+	2) ## LOOPED MODE
+		echo "Produce DENSITIES and IMAGES..."
 		for FILE in ${DENPATH}/density.*.dat
 		do
 			setFileID ${FILE}
@@ -30,8 +32,8 @@ case $MODE in
 			#[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
 		done
 		;;
-	3)
-		echo "Produce densities, images and a movie..."
+	3) ## LOOPED MODE
+		echo "Produce DENSITIES, IMAGES and a MOVIE..."
 		for FILE in ${DENPATH}/density.*.dat
 		do
 			setFileID ${FILE}
@@ -43,7 +45,18 @@ case $MODE in
 		done
 		compileMovie
 		;;
-	4)
+	4) ## LOOPED MODE
+		echo "Produce IMAGES and a MOVIE..."
+		for FILE in ${DENPATH}/density.*.dat
+		do
+			setFileID ${FILE}
+			[ ! -f Movie/Params/param-${ID}.dat ] && genParams ${FILE}
+			[ ! -f Movie/2D-images/denxz-${ID}.png ] && plotImage
+			#[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
+		done
+		compileMovie
+		;;		
+	5)
 		echo "Produce a single density and image..."
 		setFileID ${DENPATH}
 		[ ! -f Movie/2D-densities/current.${ID}.dat ] && genCurrent ${DENPATH}
@@ -58,16 +71,6 @@ case $MODE in
 			#[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
 		fi
 		;;
-	5)
-		echo "Produce only images..."
-		for FILE in ${DENPATH}/density.*.dat
-		do
-			setFileID ${FILE}
-			[ ! -f Movie/Params/param-${ID}.dat ] && genParams ${FILE}
-			[ ! -f Movie/2D-images/denxz-${ID}.png ] && plotImage
-			#[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
-		done
-		;;		
 	6)
 		echo "Produce only a movie..."
 		compileMovie
