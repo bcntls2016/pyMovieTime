@@ -9,7 +9,7 @@
  epsrho			= 1.d-4
  npi			= 6
  hx = 0.2,	hy = 0.2,	hz = 0.2 ! AFTER INTERPOLATION
- nx = 384,	ny = 384,	nz = 384 ! AFTER INTERPOLATION
+ nx = 384,	ny = 384,	nz = 512 ! AFTER INTERPOLATION
  xi = -7.5d0,	xf = 0d0
  yi = -2.5d0,	yf = 2.5d0
  zi = 0.0d0,	zf = 0.0d0

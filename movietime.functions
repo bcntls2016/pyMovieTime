@@ -64,7 +64,7 @@ genParams () {
 	echo "genParams()"
 	ln -s ${1} djogger.dat
 	./params < density.settings
-	if [[ $MANUAL_DYNPARMS == "true" && $STATIC == "false" ]]
+	if [[ $MANUAL_TIME == "true" && $STATIC == "false" ]]
 	then
 		T=$(echo "$T0+$DT*$ID" | bc | sed 's/^\./0./')
 		echo "time = $T" >> params.py
@@ -110,6 +110,6 @@ plot1DImage () {
 
 compileMovie () {
 	echo "compileMovie()"
-	ffmpeg -start_number ${FIRSTFRAME} -r ${FPS} -f image2 -i Movie/2D-images/den.%0${IDWIDTH}d.png -vcodec libx264 -preset \
+	ffmpeg -start_number ${FIRST_FRAME_NR} -r ${FPS} -f image2 -i Movie/2D-images/den.%0${ID_WIDTH}d.png -vcodec libx264 -preset \
 		ultrafast -crf 18 -pix_fmt yuv420p Movie/movie-2D.mp4
 }

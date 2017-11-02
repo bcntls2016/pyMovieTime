@@ -56,9 +56,9 @@ The \verb+MovieTime+-directory doesn't have to be in a specific place to work bu
 If you are on a Mac and use the Intel Fortran compiler, uncomment the line \verb+#source /opt/intel/bin/compilervars.sh intel64+. I assume you know how to modify \verb+src/Makefile+ to make the Fortran programs compile and link properly.
 
 \begin{description}
-    \item[\PVerb{MANUAL_DYNPARMS:}] \verb+true+/\verb+false+ This is to set the time manually in the image frames. This is for the old density files that do not contain the time not the helium center of mass in the header. The fields \verb+{X,Y}CM+ are ignored and the helium droplet's center of mass position is set to 0 and then added to the \verb+params.$ID.py+ file.
-    \item[\PVerb{T0, DT:}] If \verb+MANUAL_DYNPARMS+ is set to \verb+true+, \verb+T0+ sets the time offset from 0 and \verb+DT+ sets the size of the timestep in picoseconds.
-    \item[\PVerb{STATIC:}] If this field is set to \verb+true+, \verb+MANUAL_DYNPARMS+ is ignored and the center of mass coordinates of the helium droplet, set in \verb+{X,Y}CM+, is manually added to the \verb+params.$ID.py+ file.
+    \item[\PVerb{MANUAL_TIME:}] \verb+true+/\verb+false+ This is to set the time manually in the image frames. This is for the old density files that do not contain the time not the helium center of mass in the header. The fields \verb+{X,Y}CM+ are ignored and the helium droplet's center of mass position is set to 0 and then added to the \verb+params.$ID.py+ file.
+    \item[\PVerb{T0, DT:}] If \verb+MANUAL_TIME+ is set to \verb+true+, \verb+T0+ sets the time offset from 0 and \verb+DT+ sets the size of the timestep in picoseconds.
+    \item[\PVerb{STATIC:}] If this field is set to \verb+true+, \verb+MANUAL_TIME+ is ignored and the center of mass coordinates of the helium droplet, set in \verb+{X,Y}CM+, is manually added to the \verb+params.$ID.py+ file.
     \item[\PVerb{{X,Y}CM:}] Center of mass coordinates of the helium droplet in the chosen plane.
     \item[\PVerb{FPS:}] Number of frames per second at which the movie is going to be compiled. Usually between 15 and 25 frames per second. 
 \end{description}

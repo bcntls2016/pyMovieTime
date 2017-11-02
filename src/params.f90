@@ -3,6 +3,7 @@ PROGRAM Params
 IMPLICIT NONE
 character (len = 15)	:: a(4)				! Crap we don't need
 character (len = 15)	:: b(2)				! Crap we don't need
+character (len = 15)	:: c(4)				! Crap we don't need
 character (len = 40)	:: inputdata = "djogger.dat"! Input file containing the wavefunction
 character (len = 40)	:: param = "params.py"	! Output file containing the parameters
 character (len = 1) 	:: cchar = "#"				! Character to be skipped on routine titols
@@ -94,7 +95,7 @@ select case (parammode)
 		read(1,*)
 		read(1,*)
 		read(1,*) a,time
-		read(1,*) b,rcm
+		read(1,*) c,rcm
 		rewind(1)
 		call titols(1,cchar,isalto)
 		read(1,*) xmax,ymax,zmax,hx,hy,hz,nx,ny,nz,rimp,vimp
