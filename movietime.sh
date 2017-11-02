@@ -47,9 +47,16 @@ case $MODE in
 		echo "Produce a single density and image..."
 		setFileID ${DENPATH}
 		[ ! -f Movie/2D-densities/current.${ID}.dat ] && genCurrent ${DENPATH}
-		[ ! -f Movie/Params/params.${ID}.py ] && genParams ${DENPATH}
-		[ ! -f Movie/2D-images/den.${ID}.png ] && plotImagePy
-		#[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
+		if [[ $OVERWRITE == "true" ]]
+		then
+			genParams ${DENPATH}
+			plotImagePy
+			#plot1DImage
+		else
+			[ ! -f Movie/Params/params.${ID}.py ] && genParams ${DENPATH}
+			[ ! -f Movie/2D-images/den.${ID}.png ] && plotImagePy
+			#[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
+		fi
 		;;
 	5)
 		echo "Produce only images..."
