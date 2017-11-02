@@ -7,6 +7,18 @@ import sys
 from params import *
 from plotsettings import *
 
+def getStateColor( state ):
+    if state == 'gs':
+        return ColorGS;
+    elif State == 'es1':
+        return ColorES1;
+    elif State == 'es2':
+        return ColorES2;
+    elif State == 'ion':
+        return ColorIon;
+    else:
+        return ColorGS;
+
 ### SOME GLOBAL SETTINGS
 plt.rcParams['text.color'] = 'lightgrey'
 plt.rcParams['axes.labelcolor'] = 'lightgrey'
@@ -93,13 +105,10 @@ if DrawDensity:
 	im.set_interpolation('lanczos')
 	cbar=plt.colorbar(im, ticks=[0, 0.0109, 0.0218, 0.0327], pad=0.02)
 	cbar.ax.set_yticklabels([r'$0$', r'$\frac{1}{2}\rho_0$', r'$\rho_0$', r'$\frac{3}{2}\rho_0$']) 
-
 if DrawImpurity:
-	circle=plt.Circle((ximp, yimp),
+        circle=plt.Circle((ximp, yimp),
 			radius=1.25,
-			#color='#d9ef8b') # GREEN: GROUND ST.
-			color='#41b6c4') # BLUE-GREEN: EXCITED ST. #1
-			#color='#e7298a') # MANGENTA: EXCITED ST. #2
+                        color=getStateColor(State))
 	plt.axes().add_patch(circle)
 
 if DrawCirculation:

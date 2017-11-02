@@ -2,6 +2,7 @@
 
 DrawDensity =		True
 DrawImpurity =		True
+State =                 'es1'
 DrawCirculation =	False
 
 FirstFrame =		False
@@ -17,3 +18,8 @@ ylabel = 		r'$z / [\mathrm{\AA}]$'
 rho0 =			0.0218
 rhoscaling =		0.5
 denmaxvalue =		0.04
+
+ColorGS =               '#d9ef8b'
+ColorES1 =              '#41b6c4'
+ColorES2 =              '#e7298a'
+ColorIon =              ''
