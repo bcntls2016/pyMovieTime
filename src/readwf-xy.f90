@@ -23,6 +23,7 @@ Character (len=80) :: results = "density.res"
 Character (len=80) :: den2dout = "den.dat", currents = "current.dat", inputdata = "djogger.dat"
 Character (len=80) :: den1d0x = "den0-x.dat", den1d0y = "den0-y.dat", den1d0z = "den0-z.dat"
 Character (len=80) :: den1dx = "den-1.dat", den1dy = "den-2.dat"
+character (len = 40)    :: params = "params.py" ! Output file containing the parameters
 Data nx/436/, ny/436/, nZ/436/, hx/0.4d0/, hy/0.4d0/, hy/0.4d0/, &
 		npd/13/, Km1/4/, ndmax/1/, nthreads/4/, npi/4/
 Data fac/158.66624d0/,epsrho/1.d-6/
