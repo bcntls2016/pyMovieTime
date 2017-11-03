@@ -26,7 +26,7 @@ mpirun chdb \
 	--in-files ../he-wfs/filter.txt \
 	--out-dir Movie.${SLURM_JOBID} \
 	--in-type dat \
-	--command-line './movietime.sh 3 %name% %in-dir% %out-dir%' \
+	--command-line './movietime.sh 5 %name% %in-dir% %out-dir%' \
 	--out-files %name% \
 	--on-error=errors.${SLURM_JOBID} \
 	--report=report.${SLURM_JOBID}

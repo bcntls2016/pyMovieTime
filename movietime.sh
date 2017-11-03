@@ -11,14 +11,14 @@ case $MODE in
 		echo "Setting up the environment..."
 		[ ! -f readwf-xy ] && Compile
 		[ ! -f params ] && Compile
-		[ ! -d Movie ] && makeDirStructure
+		[ ! -d ${OUTDIR} ] && makeDirStructure
 		;;
 	1) ## LOOPED MODE
 		echo "Produce only DENSITIES..."
 		for FILE in ${DENPATH}/density.*.dat
 		do
 			setFileID ${FILE}
-			[ ! -f Movie/2D-densities/current.${ID}.dat ] && genCurrent ${FILE}
+			[ ! -f ${OUTDIR}/2D-densities/current.${ID}.dat ] && genCurrent ${FILE}
 		done
 		;;
 	2) ## LOOPED MODE
@@ -26,10 +26,10 @@ case $MODE in
 		for FILE in ${DENPATH}/density.*.dat
 		do
 			setFileID ${FILE}
-			[ ! -f Movie/2D-densities/current.${ID}.dat ] && genCurrent ${FILE}
-			[ ! -f Movie/Params/param-${ID}.dat ] && genParams ${FILE}
-			[ ! -f Movie/2D-images/denxz-${ID}.png ] && plotImage
-			#[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
+			[ ! -f ${OUTDIR}/2D-densities/current.${ID}.dat ] && genCurrent ${FILE}
+			[ ! -f ${OUTDIR}/Params/param-${ID}.dat ] && genParams ${FILE}
+			[ ! -f ${OUTDIR}/2D-images/denxz-${ID}.png ] && plotImage
+			#[ ! -f ${OUTDIR}/1D-images/denz-${ID}.png ] && plot1DImage
 		done
 		;;
 	3) ## LOOPED MODE
@@ -37,10 +37,10 @@ case $MODE in
 		for FILE in ${DENPATH}/density.*.dat
 		do
 			setFileID ${FILE}
-			[ ! -f Movie/2D-densities/current.${ID}.dat ] && genCurrent ${FILE}
-			[ ! -f Movie/Params/params.${ID}.py ] && genParams ${FILE}
-			[ ! -f Movie/2D-images/den.${ID}.png ] && plotImagePy	
-			#[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
+			[ ! -f ${OUTDIR}/2D-densities/current.${ID}.dat ] && genCurrent ${FILE}
+			[ ! -f ${OUTDIR}/Params/params.${ID}.py ] && genParams ${FILE}
+			[ ! -f ${OUTDIR}/2D-images/den.${ID}.png ] && plotImagePy	
+			#[ ! -f ${OUTDIR}/1D-images/denz-${ID}.png ] && plot1DImage
 			echo
 		done
 		compileMovie
@@ -50,25 +50,25 @@ case $MODE in
 		for FILE in ${DENPATH}/density.*.dat
 		do
 			setFileID ${FILE}
-			[ ! -f Movie/Params/param-${ID}.dat ] && genParams ${FILE}
-			[ ! -f Movie/2D-images/denxz-${ID}.png ] && plotImage
-			#[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
+			[ ! -f ${OUTDIR}/Params/param-${ID}.dat ] && genParams ${FILE}
+			[ ! -f ${OUTDIR}/2D-images/denxz-${ID}.png ] && plotImage
+			#[ ! -f ${OUTDIR}/1D-images/denz-${ID}.png ] && plot1DImage
 		done
 		compileMovie
 		;;		
 	5)
 		echo "Produce a single density and image..."
-		setFileID ${DENPATH}
-		[ ! -f Movie/2D-densities/current.${ID}.dat ] && genCurrent ${DENPATH}
+		setFileID ${DENPATH}/${NAME}
+		[ ! -f ${OUTDIR}/2D-densities/current.${ID}.dat ] && genCurrent ${DENPATH}
 		if [[ $OVERWRITE == "true" ]]
 		then
 			genParams ${DENPATH}
 			plotImagePy
 			#plot1DImage
 		else
-			[ ! -f Movie/Params/params.${ID}.py ] && genParams ${DENPATH}
-			[ ! -f Movie/2D-images/den.${ID}.png ] && plotImagePy
-			#[ ! -f Movie/1D-images/denz-${ID}.png ] && plot1DImage
+			[ ! -f ${OUTDIR}/Params/params.${ID}.py ] && genParams ${DENPATH}
+			[ ! -f ${OUTDIR}/2D-images/den.${ID}.png ] && plotImagePy
+			#[ ! -f ${OUTDIR}/1D-images/denz-${ID}.png ] && plot1DImage
 		fi
 		;;
 	6)

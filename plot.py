@@ -4,8 +4,8 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
-from params import *
 from plotsettings import *
+vars = __import__(sys.argv[2].replace('.py',''))
 
 def getStateColor( state ):
     if state == 'gs':
@@ -27,16 +27,15 @@ plt.rcParams['axes.edgecolor'] = '#A9A9A9'
 plt.rcParams['grid.color'] = '#A9A9A9'
 plt.rcParams['xtick.color'] = '#A9A9A9'
 plt.rcParams['ytick.color'] = '#A9A9A9'
-#plt.rc('text', usetex=True)
 dpiout = 300
 
 ### LABEL PLACEMENT
-timex = -xmax + 2.5
-timey = ymax - 4.5
-fframex = -xmax + 2.5
-fframey = -ymax + 2.5
+timex = -vars.xmax + 2.5
+timey = vars.ymax - 4.5
+fframex = -vars.xmax + 2.5
+fframey = -vars.ymax + 2.5
 
-posx = xmax - 22.5
+posx = vars.xmax - 22.5
 posy = timey
 speedvxx = posx
 speedvxy = posy - 3.25
@@ -49,8 +48,9 @@ particley = energyy - 3.25
 
 ### FILENAMES AND LABELS
 infilename = sys.argv[1]
-outfile = 'density.png'
-timestring = "$t=" + str(time) + "\,\mathrm{ps}$"
+ID = sys.argv[1].split('.')[1]
+outfile = "den." + ID + ".png"
+timestring = "$t=" + str(vars.time) + "\,\mathrm{ps}$"
 
 ### READ RAW DATA
 X = []						# Declare empty list
@@ -98,7 +98,7 @@ Cy[Mask] = None
 ### PLOT DATA
 if DrawDensity:
 	im = plt.imshow(D,
-			extent=[-xmax, xmax, -ymax, ymax],
+			extent=[-vars.xmax, vars.xmax, -vars.ymax, vars.ymax],
 			cmap=plt.cm.CMRmap,
 			vmin=0,
 			vmax=denmaxvalue)
@@ -106,7 +106,7 @@ if DrawDensity:
 	cbar=plt.colorbar(im, ticks=[0, 0.0109, 0.0218, 0.0327], pad=0.02)
 	cbar.ax.set_yticklabels([r'$0$', r'$\frac{1}{2}\rho_0$', r'$\rho_0$', r'$\frac{3}{2}\rho_0$']) 
 if DrawImpurity:
-        circle=plt.Circle((ximp, yimp),
+        circle=plt.Circle((vars.ximp, vars.yimp),
 			radius=1.25,
                         color=getStateColor(State))
 	plt.axes().add_patch(circle)
@@ -126,8 +126,8 @@ if FirstFrame:
 			family='Arial')
 
 if IncludePosition:
-	X=ximp-xcom
-	Y=yimp-ycom
+	X=vars.ximp-vars.xcom
+	Y=vars.yimp-vars.ycom
 	R=np.sqrt(X*X+Y*Y)
 	positionstring = "$r_{I}=" + str(round(R,1)) + "\,\mathrm{\AA}$"
 	plt.axes().text(posx, posy, positionstring,
@@ -137,8 +137,8 @@ if IncludePosition:
 if IncludeSpeed:
 	X=xlabel[1]
 	Y=ylabel[1]
-	vxstring = "$v_{" + X + "}=" + str(round(vximp,1)) + "\,\mathrm{ms^{-1}}$"
-	vystring = "$v_{" + Y + "}=" + str(round(vyimp,1)) + "\,\mathrm{ms^{-1}}$"
+	vxstring = "$v_{" + X + "}=" + str(round(vars.vximp,1)) + "\,\mathrm{ms^{-1}}$"
+	vystring = "$v_{" + Y + "}=" + str(round(vars.vyimp,1)) + "\,\mathrm{ms^{-1}}$"
 	plt.axes().text(speedvxx, speedvxy, vxstring,
 			color='lightgrey',
 			fontsize=11)
@@ -147,7 +147,7 @@ if IncludeSpeed:
 			fontsize=11)
 
 if IncludeEnergy:
-	energystring = "$E_{k}=" + str(round(ekin,1)) + "\,\mathrm{K}$"
+	energystring = "$E_{k}=" + str(round(vars.ekin,1)) + "\,\mathrm{K}$"
 	plt.axes().text(energyx, energyy, energystring,
 			color='lightgrey',
 			fontsize=11)
@@ -160,8 +160,8 @@ if IncludeNParticles:
 
 plt.minorticks_on()
 plt.axes().set_aspect('equal')
-plt.axes().set_xlim([-xmax,xmax])
-plt.axes().set_ylim([-ymax,ymax])
+plt.axes().set_xlim([-vars.xmax,vars.xmax])
+plt.axes().set_ylim([-vars.ymax,vars.ymax])
 plt.xlabel(xlabel, fontsize=14)
 plt.ylabel(ylabel, fontsize=14)
 plt.axes().text(timex,timey, timestring, color='white', fontsize=14, family='Arial')

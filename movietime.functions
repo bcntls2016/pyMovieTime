@@ -11,13 +11,13 @@ Compile () {
 
 makeDirStructure () {
 	echo "makeDirStructure()"
-	mkdir -v Movie
-	[ ! -d Movie/1D-densities ] && mkdir -v Movie/1D-densities
-	[ ! -d Movie/2D-densities ] && mkdir -v Movie/2D-densities
-	[ ! -d Movie/Params ] && mkdir -v Movie/Params
-	[ ! -d Movie/Results ] && mkdir -v Movie/Results
-	[ ! -d Movie/2D-images ] && mkdir -v Movie/2D-images
-	[ ! -d Movie/1D-images ] && mkdir -v Movie/1D-images
+	[ ! -d ${OUTDIR} ] && mkdir -v ${OUTDIR}
+	[ ! -d ${OUTDIR}/1D-densities ] && mkdir -v ${OUTDIR}/1D-densities
+	[ ! -d ${OUTDIR}/2D-densities ] && mkdir -v ${OUTDIR}/2D-densities
+	[ ! -d ${OUTDIR}/Params ] && mkdir -v ${OUTDIR}/Params
+	[ ! -d ${OUTDIR}/Results ] && mkdir -v ${OUTDIR}/Results
+	[ ! -d ${OUTDIR}/2D-images ] && mkdir -v ${OUTDIR}/2D-images
+	[ ! -d ${OUTDIR}/1D-images ] && mkdir -v ${OUTDIR}/1D-images
 }
 
 setFileID () {
@@ -29,10 +29,21 @@ setFileID () {
 	ID=${ID%.*}
 }
 
+genInputFile () {
+	echo "genInputFile()"
+	cp density.settings density.${ID}.settings
+	sed -i "/inputdata/c\ inputdata\t\t= '${DENPATH}/density.${ID}.dat'" density.${ID}.settings
+	sed -i "/currents/c\ currents\t\t= 'current.${ID}.dat'" density.${ID}.settings
+	sed -i "/den1dx/c\ den1dx\t\t\t= 'den-1.${ID}.dat'" density.${ID}.settings
+	sed -i "/den1dy/c\ den1dy\t\t\t= 'den-2.${ID}.dat'" density.${ID}.settings
+	sed -i "/results/c\ results\t\t= 'density.${ID}.res'" density.${ID}.settings
+	sed -i "/params/c\ params\t\t\t= 'params.${ID}.py'" density.${ID}.settings
+}
+
 genCurrent () {
 	echo "genCurrent()"
-	ln -sf ${1} djogger.dat
-	./readwf-xy < density.settings
+	genInputFile
+	./readwf-xy < density.${ID}.settings
 	RC=$?
 	if [ $RC -eq 1 ]
 	then
@@ -53,63 +64,64 @@ correct '${green}readmode${rst}' in '${green}density.settings${rst}'."
 		echo
 		exit 1
 	fi
-	mv den-1.dat Movie/1D-densities/den-1.${ID}.dat
-	mv den-2.dat Movie/1D-densities/den-2.${ID}.dat
-	mv density.res Movie/Results/density.${ID}.res
-	head -n -1 current.dat > Movie/2D-densities/current.${ID}.dat
-	rm current.dat djogger.dat
+	mv den-1.${ID}.dat ${OUTDIR}/1D-densities/
+	mv den-2.${ID}.dat ${OUTDIR}/1D-densities/
+	mv density.${ID}.res ${OUTDIR}/Results/
+	head -n -1 current.${ID}.dat > ${OUTDIR}/2D-densities/current.${ID}.dat
+	rm current.${ID}.dat density.${ID}.settings
 }
 
 genParams () {
 	echo "genParams()"
-	ln -s ${1} djogger.dat
-	./params < density.settings
+	genInputFile
+	./params < density.${ID}.settings
 	if [[ $MANUAL_TIME == "true" && $STATIC == "false" ]]
 	then
 		T=$(echo "$T0+$DT*$ID" | bc | sed 's/^\./0./')
-		echo "time = $T" >> params.py
-		echo "xcom = 0.0" >> params.py
-		echo "ycom = 0.0" >> params.py
+		echo "time = $T" >> params.${ID}.py
+		echo "xcom = 0.0" >> params.${ID}.py
+		echo "ycom = 0.0" >> params.${ID}.py
 	fi
 	if [[ $STATIC == "true" ]]
 	then
-		echo "time = 0" >> params.py
-		echo "xcom = $XCM" >> params.py
-		echo "ycom = $YCM" >> params.py
+		echo "time = 0" >> params.${ID}.py
+		echo "xcom = $XCM" >> params.${ID}.py
+		echo "ycom = $YCM" >> params.${ID}.py
 	fi
-	mv params.py Movie/Params/params.${ID}.py
-	rm djogger.dat
+	mv params.${ID}.py ${OUTDIR}/Params/
+	rm density.${ID}.settings
 }
 
 plotImagePy () {
 	echo "plotImage()"
-	ln -sv Movie/Params/params.${ID}.py params.py
+	ln -sv ${OUTDIR}/2D-densities/current.${ID}.dat current.${ID}.dat
+	ln -sv ${OUTDIR}/Params/params.${ID}.py params.${ID}.py
 	if [ -z ${PYTHON+x} ]
 	then
-		./plot.py Movie/2D-densities/current.${ID}.dat
+		./plot.py current.${ID}.dat params.${ID}.py
 	else
-		$PYTHON plot.py Movie/2D-densities/current.${ID}.dat
+		$PYTHON plot.py current.${ID}.dat params.${ID}.py
 	fi
-	convert density.png -resize x${HEIGHT} density.png
-	WIDTH=$(convert density.png -print "%w" /dev/null)
+	convert den.${ID}.png -resize x${HEIGHT} den.${ID}.png
+	WIDTH=$(convert den.${ID}.png -print "%w" /dev/null)
 	REM=$((WIDTH%2))
-	[ $REM -ne 0 ] && convert density.png -chop 1x0 density.png
-	mv density.png Movie/2D-images/den.${ID}.png
-	rm params.py params.pyc
+	[ $REM -ne 0 ] && convert den.${ID}.png -chop 1x0 den.${ID}.png
+	mv den.${ID}.png ${OUTDIR}/2D-images/den.${ID}.png
+	rm current.${ID}.dat params.${ID}.py
 }
 
 plot1DImage () {
 	echo "plot1DImage()"
 	while read xmax zmax ximp zimp vimp ekin t zcm
 	do
-		$GNUPLOT -e "INPUT='Movie/1D-densities/denz-${ID}.dat'; \
+		$GNUPLOT -e "INPUT='${OUTDIR}/1D-densities/denz-${ID}.dat'; \
 			xmax='${zmax}'; zimp='${zimp}'; t='${t}'" plot1Dden.gnu
-	done < Movie/Params/param-${ID}.dat
-	mv denz.png Movie/1D-images/denz-${ID}.png
+	done < ${OUTDIR}/Params/param-${ID}.dat
+	mv denz.png ${OUTDIR}/1D-images/denz-${ID}.png
 }
 
 compileMovie () {
 	echo "compileMovie()"
 	ffmpeg -start_number ${FIRST_FRAME_NR} -r ${FPS} -f image2 -i ${OUTDIR}/2D-images/den.%0${ID_WIDTH}d.png -vcodec libx264 -preset \
-		ultrafast -crf 18 -pix_fmt yuv420p Movie/movie-2D.mp4
+		ultrafast -crf 18 -pix_fmt yuv420p ${OUTDIR}/movie.mp4
 }
