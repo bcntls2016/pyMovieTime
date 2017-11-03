@@ -5,12 +5,12 @@
  den1dy			= 'den-2.123.dat'
  results		= 'density.123.res'
  params			= 'params.123.py'
- denmode		= 3			! Default set to 3: Isotropic dynamics 
- parammode		= 3			! Default set to 3: Isotr.dyn. w/extended header info
- mimpur			= 131.29d0	! Impurity mass in [u]
- plane			= 'xz' 		! Can be {xy,xz,yz}
- tracking		= .false. 	! Controls impurity tracking
- planeoffset	= 0 			! offset along perp. axis in \AA
+ denmode		= 3
+ parammode		= 3
+ mimpur			= 131.29d0
+ plane			= 'xz'
+ tracking		= .false.
+ planeoffset	= 0
  epsrho			= 1.d-4
  npi			= 6
  hx = 0.2,	hy = 0.2,	hz = 0.2 ! AFTER INTERPOLATION
