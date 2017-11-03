@@ -95,19 +95,19 @@ genParams () {
 plotImagePy () {
 	echo "plotImage()"
 	ln -sv ${OUTDIR}/2D-densities/current.${ID}.dat current.${ID}.dat
-	ln -sv ${OUTDIR}/Params/params.${ID}.py params.${ID}.py
+	ln -sv ${OUTDIR}/Params/params.${ID}.py params${ID}.py
 	if [ -z ${PYTHON+x} ]
 	then
-		./plot.py current.${ID}.dat params.${ID}.py
+		./plot.py current.${ID}.dat params${ID}.py
 	else
-		$PYTHON plot.py current.${ID}.dat params.${ID}.py
+		$PYTHON plot.py current.${ID}.dat params${ID}.py
 	fi
 	convert den.${ID}.png -resize x${HEIGHT} den.${ID}.png
 	WIDTH=$(convert den.${ID}.png -print "%w" /dev/null)
 	REM=$((WIDTH%2))
 	[ $REM -ne 0 ] && convert den.${ID}.png -chop 1x0 den.${ID}.png
 	mv den.${ID}.png ${OUTDIR}/2D-images/den.${ID}.png
-	rm current.${ID}.dat params.${ID}.py
+	rm current.${ID}.dat params${ID}.py params${ID}.pyc
 }
 
 plot1DImage () {
