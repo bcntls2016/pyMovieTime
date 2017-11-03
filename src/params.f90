@@ -1,6 +1,9 @@
 PROGRAM Parms
 
 IMPLICIT NONE
+Character (len=80) :: results = "density.res"
+Character (len=80) :: currents = "current.dat"
+Character (len=80) :: den1dx = "den-1.dat", den1dy = "den-2.dat"
 character (len = 15)	:: a(4)				! Crap we don't need
 character (len = 15)	:: b(2)				! Crap we don't need
 character (len = 15)	:: c(4)				! Crap we don't need
@@ -30,8 +33,9 @@ real (kind = 8)		:: planeoffset = 0
 real (kind = 8) , parameter	:: mp_u = 0.020614837554503673d0  	! proton mass in Angs**-2 * Kelvin**-1, go figure!
 real (kind = 8)	, parameter	::	Ktops=7.638235070684233d0		! Convert K to ps
 
-Namelist/Input/inputdata,params,nthreads,denmode,parammode,mimpur,plane,tracking,planeoffset, &
-				nx,ny,nz,hx,hy,hz,npd,npi,Km1,icon,epsrho,xi,xf,yi,yf,zi,zf
+Namelist/Input/inputdata,params,currents,den1dx,den1dy,results, &
+	denmode,parammode,mimpur,plane,tracking,planeoffset,nx,ny,nz,hx,hy, &
+	hz,npd,npi,Km1,icon,epsrho,xi,xf,yi,yf,zi,zf
 read(5,nml=input)
 
 mimpur = mimpur * mp_u

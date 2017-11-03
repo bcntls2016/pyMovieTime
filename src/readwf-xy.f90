@@ -13,7 +13,7 @@ integer (kind=4)	:: iplaneoffset = 0
 integer (kind = 4)	:: ninvar			! Number of components of lambda
 integer (kind=4)	:: denmode = 42
 integer (kind=4)	:: parammode = 42	! Density reading mode 
-integer (kind=4) :: nthreads = 4
+integer (kind=4) :: nthreads = 1
 Integer   (Kind=4) :: nn(2), Icon=13
 Character (len =1) :: cchar="#"
 Logical (kind = 4) :: limp
@@ -25,11 +25,11 @@ Character (len=80) :: den1d0x = "den0-x.dat", den1d0y = "den0-y.dat", den1d0z = 
 Character (len=80) :: den1dx = "den-1.dat", den1dy = "den-2.dat"
 character (len = 40)    :: params = "params.py" ! Output file containing the parameters
 Data nx/436/, ny/436/, nZ/436/, hx/0.4d0/, hy/0.4d0/, hy/0.4d0/, &
-		npd/13/, Km1/4/, ndmax/1/, nthreads/4/, npi/4/
+		npd/13/, Km1/4/, ndmax/1/, nthreads/1/, npi/4/
 Data fac/158.66624d0/,epsrho/1.d-6/
 Data xi/-40.d0/, xf/40.d0/, yi/-40.d0/, yf/40.d0/, zi/-40.d0/, zf/40.d0/
 
-Namelist/Input/inputdata,currents,den1dx,den1dy,results,params,nthreads,denmode, &
+Namelist/Input/inputdata,currents,den1dx,den1dy,results,params,denmode, &
 	parammode,mimpur,plane,tracking,planeoffset,nx,ny,nz,hx,hy,hz,npd, &
 	npi,Km1,icon,epsrho,xi,xf,yi,yf,zi,zf
 read(5,nml=input)

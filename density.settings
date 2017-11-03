@@ -5,7 +5,6 @@
  den1dy			= 'den-2.123.dat'
  results		= 'density.123.res'
  params			= 'params.123.py'
- nthreads		= 20
  denmode		= 3			! Default set to 3: Isotropic dynamics 
  parammode		= 3			! Default set to 3: Isotr.dyn. w/extended header info
  mimpur			= 131.29d0	! Impurity mass in [u]
