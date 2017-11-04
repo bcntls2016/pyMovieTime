@@ -58,8 +58,8 @@ case $MODE in
 		;;		
 	5)
 		echo "Produce a single density and image..."
+		makeDirStructure
 		setFileID ${DENPATH}/${NAME}
-		[ ! -d ${OUTDIR} ] && makeDirStructure
 		[ ! -f ${OUTDIR}/2D-densities/current.${ID}.dat ] && genCurrent ${DENPATH}
 		if [[ $OVERWRITE == "true" ]]
 		then

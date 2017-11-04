@@ -4,7 +4,6 @@ manual/manual.log
 manual/manual.pdf
 manual/manual.synctex.gz
 manual/manual.toc
-Movie/*
 src/readwf-xy
 src/params
 src/*.o
